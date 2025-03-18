@@ -18,9 +18,10 @@ public class User {
     private ObjectId id;
     @Indexed(unique = true)
     @NonNull
-    private String userName;
-    @NonNull
+    private String username;
     private String password;
     @DBRef // link to journal entry
     private List<JournalEntry> journalEntries = new ArrayList<>();
+    private List<String> roles ;
+
 }

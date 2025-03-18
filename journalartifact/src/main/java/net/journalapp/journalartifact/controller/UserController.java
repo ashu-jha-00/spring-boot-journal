@@ -1,13 +1,18 @@
 package net.journalapp.journalartifact.controller;
 
 import net.journalapp.journalartifact.entity.User;
+import net.journalapp.journalartifact.repository.UserRepository;
 import net.journalapp.journalartifact.service.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.Authenticator;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -19,32 +24,17 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public List<User> getAllUsers(){
-        return  userService.getAll();
-    }
+    @Autowired
+    private UserRepository userRepository;
 
-    @PostMapping
-    public User createEntry(@RequestBody User myEntry){
-        userService.saveEntry(myEntry);
-        return myEntry;
-    }
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User user){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
 
-    @GetMapping("/id/{id}")
-    public Optional<User> getJournalByID(@PathVariable ObjectId id){
-
-        if(id != null)
-        return userService.getUserByID(id);
-        else return null;
-    }
-
-
-
-    @PutMapping("/{userName}")
-    public ResponseEntity<?> updateUser(@RequestBody User user , @PathVariable String userName){
         User userInDb = userService.findByUserName(userName);
         if(userInDb != null){
-            userInDb.setUserName(user.getUserName());
+            userInDb.setUsername(user.getUsername());
             userInDb.setPassword(user.getPassword());
             userService.saveEntry(userInDb);
         }
@@ -53,9 +43,12 @@ public class UserController {
         
     }
 
-    @DeleteMapping("/id/{id}")
-    public void deleteJournalByID(@PathVariable ObjectId id){
-        userService.deleteUserByID(id);
+    @DeleteMapping("/user")
+    public ResponseEntity<?> deleteJournalByID(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        userRepository.deleteByUsername(userName);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
