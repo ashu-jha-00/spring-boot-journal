@@ -30,6 +30,8 @@ public class SpringSecurity {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/health-check", "/create-user").permitAll()
+                        .requestMatchers("/health-check", "/create-user").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

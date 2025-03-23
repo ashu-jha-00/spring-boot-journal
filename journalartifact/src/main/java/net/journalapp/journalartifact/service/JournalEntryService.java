@@ -5,6 +5,8 @@ import net.journalapp.journalartifact.entity.User;
 import net.journalapp.journalartifact.repository.JournalEntryRepository;
 import net.journalapp.journalartifact.repository.UserRepository;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class JournalEntryService {
 
     @Autowired
     private UserService userService;
+
+    private  static final Logger logger = LoggerFactory.getLogger(JournalEntryService.class);
 
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String username){

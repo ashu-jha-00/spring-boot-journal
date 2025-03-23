@@ -1,22 +1,24 @@
-# 📖 Journal App
+# 📚 Journal App
 
 ## 🔍 Overview
 The **Journal App** is a secure, end-to-end encrypted (E2EE) journaling application built with **Spring Boot** and **MongoDB**. It allows users to securely create, manage, and store personal journal entries while ensuring privacy with authentication and encryption mechanisms.
 
 With this app, a user can maintain their own collection of journals, track their thoughts over time, and update or delete entries as needed. The application is built with robust authentication and session management, ensuring that only authorized users can access their own journals.
 
-## 🛠️ Tech Stack
+## 🧐 Tech Stack
 - **Backend:** Spring Boot (Spring Security, Spring Data MongoDB, REST Controllers)
 - **Database:** MongoDB
 - **Security:** Spring Security with BCrypt password encoding
+- **Logging:** Logback with Rolling File Appender for log rotation
 
 ## 🚀 Features
 - **User Authentication**: Secure login using Spring Security
 - **CRUD Operations**: Create, Read, Update, Delete journal entries
 - **JWT Authentication (Optional)**: Can be integrated for stateless authentication
 - **MongoDB Storage**: Stores user and journal entry data
-- **Session Management**: Stateless session policy using JWT or Basic Authentication
+- **Session Management**: Stateless session policy 
 - **User-Specific Journals**: Each user has a personal collection of journals
+- **Log Rotation**: Rolling file appender automatically manages log files to avoid excessive storage usage
 
 ## ⚙️ Setup & Installation
 ### 📌 Prerequisites
@@ -25,7 +27,7 @@ Ensure you have the following installed:
 - Maven
 - MongoDB
 
-### 📥 Clone the Repository
+### 💞 Clone the Repository
 ```sh
 git clone https://github.com/your-repo/journalapp.git
 cd journalapp
@@ -53,7 +55,7 @@ mvn spring-boot:run
 | GET    | /health-check | Check server status |
 | POST   | /create-user  | Register new user |
 
-### 🔐 Protected Endpoints (Require Authentication)
+### 🔒 Protected Endpoints (Require Authentication)
 | Method | Endpoint         | Description              |
 |--------|----------------|-------------------------|
 | PUT    | /user          | Update user details     |
@@ -64,6 +66,20 @@ mvn spring-boot:run
 | PUT    | /journal/id/{id} | Update journal by ID  |
 | DELETE | /journal/id/{id} | Delete journal by ID  |
 
+## 🛋️ Logging Process
+The Journal App uses **Logback** for logging, with a **rolling file appender** to efficiently manage log files. The implementation includes:
+- **Log Storage**: Logs are saved in `journalApplication.log`.
+- **Log Rotation**: A new log file is created every hour (`journalApplication-yy-MM-dd_HH.i.log`).
+- **File Size Limit**: Each log file is limited to **10MB** to prevent excessive disk usage.
+- **Retention Policy**: A maximum of **10 log files** is maintained to keep logs manageable.
+- **Example Log Files**:
+  ```
+  journalApplication.log                   # Current log file
+  journalApplication-24-03-23_09.0.log      # Rolled log file (9 AM)
+  journalApplication-24-03-23_10.0.log      # Rolled log file (10 AM)
+  ```
+This setup ensures logs are maintained effectively without consuming unnecessary disk space.
+
 ## 📦 Dependencies
 Defined in `pom.xml`:
 - Spring Boot Web
@@ -71,20 +87,7 @@ Defined in `pom.xml`:
 - Spring Boot Security
 - Lombok
 - JUnit (for testing)
-
-## 🔮 Future Enhancements
-- Implement JWT authentication
-- Add user roles and permissions
-- Deploy to cloud platform
-- Add logging and monitoring
-- Implement soft delete for journal entries
-
-## 🎓 Acknowledgment
-Special thanks to **Engineering Digest** for their educational content on Spring Boot, MongoDB, and security. The following YouTube playlist was instrumental in shaping this project:
-
-[Spring Boot & MongoDB Course - Engineering Digest](https://www.youtube.com/playlist?list=PLA3GkZPtsafacdBLdd3p1DyRd5FGfr3Ue)
-
-Also, thanks to **ChatGPT** for helping in creating this README file! 🚀
+- Logback (for logging and log rotation)
 
 ## 🤝 Contributing
 Feel free to fork and contribute via pull requests!
